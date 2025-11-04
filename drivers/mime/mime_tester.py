@@ -1,0 +1,278 @@
+#!/usr/bin/env python
+from sys import argv
+import sys
+import os
+import networkx as nx
+import string
+import glob
+import random
+import shutil
+import codecs
+import docker
+from typing import List, Tuple, Dict, Mapping
+from subprocess import Popen, PIPE
+
+from loguru import logger
+
+from grampar.flex2fst import Flexparser
+from grampar.utils import setup_output_dir, get_common_unicode
+from grampar.utils import pairwise_diff, print_grid
+from grampar.dfafuzz import DDFACoverage, fuzz_dfa
+
+"""
+  Configurations
+"""
+MIME_CONTAINER_NAME = "mime-garden"
+
+IGNORE_FILENAME = True
+
+fuzz_targets = {
+    "mimekit-parser": {
+        "name": "mimekit-parser",
+        "cwd": "{MIME_GARDEN_PATH}/parsers/csharp/mimekit-parser",
+        "execute_str": "dotnet run ---project mimekit-parser.csproj -i {input_path} -o {output_path}",
+    },
+    "apache-common-parser": {
+        "name": "apache-common-parser",
+        "cwd": "{MIME_GARDEN_PATH}/parsers/java/apache-common-parser/target",
+        "execute_str": "java -jar MimeKit-parser-1.0-SNAPSHOT.jar -i {input_path} -o {output_path}",
+    },
+    "php-mime-mail-parser": {
+        "name": "php-mime-mail-parser",
+        "cwd": "{MIME_GARDEN_PATH}/parsers/php/php-mime-mail-parser",
+        "execute_str": "php index.php -i {input_path} -o {output_path}",
+    },
+    "mailparser-parser": {
+        "name": "mailparser-parser",
+        "cwd": "{MIME_GARDEN_PATH}/parsers/javascript/mailparser-parser",
+        "execute_str": "node index.js -i {input_path} -o {output_path}",
+    },
+    "postal-mime-parser": {
+        "name": "mailparser-parser",
+        "cwd": "{MIME_GARDEN_PATH}/parsers/javascript/postal-mime-parser",
+        "execute_str": "node index.mjs {input_path} {output_path}",
+    },
+    "email-parser": {
+        "name": "email-parser",
+        "cwd": "{MIME_GARDEN_PATH}/parsers/python/email-parser",
+        "execute_str": "python main.py -i {input_path} -o {output_path}",
+    },
+}
+
+
+"""
+  Paths
+"""
+MIME_GARDEN_PATH = os.getenv("MIME_GARDEN_PATH", "")
+if not MIME_GARDEN_PATH:
+    print("MIME_GARDEN_PATH environment variable is not set.")
+    exit(1)
+
+
+
+def get_mime_parser_result(output_dir: str)-> Tuple[bool, Mapping[str, bytes]]:
+    """
+    Returns: Mapping[<filename: str>, Tuple[<has_attch: bool>, <content: bytes>]]
+    """
+    def san(value):
+        value = value.replace(b"\r\n", b"\n")
+        value = value.replace(b" ", b"")
+        # Special handling particularly for postal
+        if value.endswith(b"\n\n"):
+            value = value[:-1]
+        if value.endswith(b"\n"):
+            value = value[:-1]
+        return value
+    results = {}
+    if IGNORE_FILENAME:
+        output_dir = f"{output_dir}/content/"
+    file_paths = sorted(glob.glob(os.path.join(output_dir, "**/*"), recursive=True))
+    for file_path in file_paths:
+        if os.path.isdir(file_path):
+            continue
+        with open(file_path, "rb") as fd:
+            content = fd.read()
+        filename = file_path.replace(output_dir, "")
+        results[filename] = san(content)
+    return (len(results) != 0, results)
+
+
+def mime_result_diff(pa: Tuple[bool, Dict], pb: Tuple[bool, Dict])-> bool:
+    a = pa[1]
+    b = pb[1]
+    #def san(value):
+    #    value = value.replace(b"\r\n", b"\n")
+    #    value = value.replace(b" ", b"")
+    #    # Special handling particularly for postal
+    #    if value.endswith(b"\n\n"):
+    #        value = value[:-1]
+    #    if value.endswith(b"\n"):
+    #        value = value[:-1]
+    #    return value
+    if len(a) != len(b):
+        return False
+    k_as = a.keys()
+    k_bs = b.keys()
+    if sorted(k_as) != sorted(k_bs):
+        return False
+    for ka, va in a.items():
+        if ka not in b:
+            return False
+        #san_va = san(va)
+        #san_vb = san(b[ka])
+        #if san_va != san_vb:
+        #    return False
+        if va != b[ka]:
+            return False
+    return True
+
+
+def test_mime_parser(parsers: List[str],
+                     mime: str|bytes,
+                     verbose: bool=False
+                     )-> Tuple[Mapping[str, bool],
+                               Mapping[str, Tuple[bool, str]], 
+                               str]:
+    def _get_rand_str(size=5):
+        return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(5))
+
+    # Write the mime to a tmp file
+    mime_file = '/tmp/mime_' + _get_rand_str()
+    with open(mime_file, "wb") as fd:
+        if type(mime) == str:
+            fd.write(mime.encode('utf8'))
+        else:
+            fd.write(mime)
+
+    # Create output dir
+    output_dir = '/tmp/mime_out_' + _get_rand_str()
+    if os.path.exists(output_dir):
+        try:
+            shutil.rmtree(output_dir)
+        except OSError as e:
+            logger.error(f"Error: {e}")
+            shutil.rmtree(mime_file)
+            exit(1)
+
+    mime_results = {}
+    full_output = ""
+    #logger.info("Querying MIME and store at {}...", output_dir)
+    logger.info("Querying MIME")
+    if verbose:
+        logger.info("Output Dir {}", output_dir)
+    # Make output_dir for each parser and run
+    for parser in parsers:
+        p_outdir = f"{output_dir}/{parser}/"
+        os.makedirs(p_outdir, exist_ok=True)
+
+        target = fuzz_targets[parser]
+        cmd = target["execute_str"].format(input_path=mime_file, output_path=p_outdir)
+        cwd = target["cwd"].format(MIME_GARDEN_PATH=MIME_GARDEN_PATH)
+
+        logger.debug(f"{parser}: {cmd}")
+        p = Popen(cmd, cwd=cwd, shell=True, stdout=PIPE, stderr=PIPE)
+        out, err = p.communicate()
+        logger.debug(f"{parser} out: \n" + out.decode())
+        if err:
+            logger.warning(f"{parser} err: \n" + err.decode())
+
+        mime_results[parser] = get_mime_parser_result(p_outdir)
+        msg = f"\n* {parser}:\n" + repr(mime_results[parser][1]) + "\n"
+        full_output += msg + "\n" + "-"*10 + "\n"
+
+    diff = pairwise_diff(mime_results, mime_result_diff)
+    full_output += print_grid(parsers, diff, verbose=False)
+
+    # Need to serialize mime_results before returning & storing
+    for k in mime_results:
+        has_attch, contents = mime_results[k]
+        repr_contents = {}
+        for fk in contents:
+            repr_contents[fk] = codecs.escape_encode(contents[fk])[0].decode()
+        mime_results[k] = (has_attch, repr_contents)
+
+    if not verbose:
+        os.remove(mime_file)
+        shutil.rmtree(output_dir)
+    if not all(diff.values()):
+        logger.debug("++ DIFF!")
+        logger.debug("\n{}", mime)
+        if verbose:
+            print(full_output)
+    return diff, mime_results, full_output
+
+
+def fuzz_mime(lex_filename: str="mime.l",
+              parsers: List=[str],
+              output_dir: str="./output",
+              seed_dir: str="./seeds_mime-simple/",
+              test_method=test_mime_parser,
+              verbose: bool=False
+              ):
+
+    if not setup_output_dir(output_dir):
+        exit(1)
+
+    flex_a = Flexparser(get_common_unicode())
+    mma = flex_a.yyparse(lex_filename)
+
+    # readin seed requests
+    seeds = []
+    for f in os.listdir(seed_dir):
+        with open(f"{seed_dir}/{f}", "r") as fd:
+            #data = fd.read().replace("\n", "\r\n")
+            data = fd.read()
+            seeds.append(data)
+
+    cov_addr = DDFACoverage(mma)
+
+    all_interesting = []
+    query_id = 0
+
+    full_count = 0
+    for seed in seeds:
+        #test_mime_parser(parsers, seed, verbose)
+        #full_count, query_id, interesting = fuzz_dfa(mma, full_count,
+        full_count, query_id,_ = fuzz_dfa(mma, full_count,
+                                          seed, cov_addr,
+                                          parsers, output_dir, query_id, 
+                                          test_method,
+                                          verbose=verbose)
+
+    #print("")
+    #print("NEXT_INTERESTING:")
+    #for q in all_interesting:
+    #    print(q)
+    #print("TOTAL QUERIES:", full_count)
+    
+
+def main():
+    parsers = [
+               # c-sharp
+               "mimekit-parser",
+               # java
+               "apache-common-parser",
+               # pyp
+               "php-mime-mail-parser",
+               # js
+               "mailparser-parser",
+               "postal-mime-parser",
+               # python
+               "email-parser",
+               ]
+    fuzz_mime("mime.l", 
+              parsers, 
+              "./output", 
+              "./seeds_mime-simple",
+              test_mime_parser,
+              verbose=False)
+
+if __name__ == '__main__':
+    logger.remove()
+    logger.add(sys.stderr, 
+               filter={
+                   "grampar.dfafuzz": "ERROR", 
+                   "": "INFO",
+                 }
+               )
+    main()
