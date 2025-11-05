@@ -1,3 +1,6 @@
+drivers/*/output/
+drivers/*/output-*
+
 .python-version
 *.pyc
 *.egg-info/
