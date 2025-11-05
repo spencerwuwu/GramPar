@@ -58,21 +58,21 @@ def fuzz_mime_cfg(parsers: List=[str],
     full_count = 0
 
     full_count, query_id, _ = fuzz_cfg(cfg_file, 
-                                    full_count,
-                         MimeLexer,
-                         MimeParser,
-                         "mimeMessage",
-                         seeds, 
-                         seeds, 
-                         skip_rulenames,
-                         no_mutate,
-                         parsers, 
-                         output_dir, 
-                         query_id,
-                         test_method,
-                         multi_core_num=CORE,
-                         dry_run=False,
-                         verbose=verbose)
+                                       full_count,
+                                       MimeLexer,
+                                       MimeParser,
+                                       "mimeMessage",
+                                       seeds, 
+                                       seeds, 
+                                       skip_rulenames,
+                                       no_mutate,
+                                       parsers, 
+                                       output_dir, 
+                                       query_id,
+                                       test_method,
+                                       multi_core_num=CORE,
+                                       dry_run=False,
+                                       verbose=verbose)
 
     print("Full queries sent:", full_count)
     
