@@ -1,8 +1,6 @@
 #!/usr/bin/env python
-from sys import argv
 import sys
 import os
-import networkx as nx
 import string
 import glob
 import random
@@ -13,10 +11,7 @@ from typing import List, Tuple, Dict, Mapping
 
 from loguru import logger
 
-from grampar.flex2fst import Flexparser
-from grampar.utils import setup_output_dir, get_common_unicode
 from grampar.utils import pairwise_diff, print_grid
-from grampar.dfafuzz import DDFACoverage, fuzz_dfa
 
 """
   Configurations
