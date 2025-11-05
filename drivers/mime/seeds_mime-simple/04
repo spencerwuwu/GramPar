@@ -1,0 +1,25 @@
+MIME-Version: 1.0
+From: sender@example.com
+To: recipient@example.com
+Subject: 8bit encoding example
+Date: Thu, 14 Aug 2025 13:30:00 +0000
+Content-Type: multipart/mixed; boundary="----=_Part_3_2468013579"
+
+------=_Part_3_2468013579
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+
+8bit transfer encoding.
+
+------=_Part_3_2468013579
+Content-Type: text/plain; name="utf8-text.txt"
+Content-Transfer-Encoding: 8bit
+Content-Disposition: attachment; filename="utf8-text.txt"
+
+UTF-8 Text with 8bit Encoding
+=============================
+
+Example
+
+------=_Part_3_2468013579--
+

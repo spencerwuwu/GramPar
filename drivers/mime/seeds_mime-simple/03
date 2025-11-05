@@ -1,0 +1,46 @@
+MIME-Version: 1.0
+From: sender@example.com
+To: recipient@example.com
+Subject: Multiple text attachments
+Date: Thu, 14 Aug 2025 12:00:00 +0000
+Content-Type: multipart/mixed; boundary="----=_Part_2_1357924680"
+
+------=_Part_2_1357924680
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+<html>
+<p>Special HTML characters: &lt; &gt; &amp; &quot; &#39;</p>
+<p>Unicode: =E2=9C=93 =E2=9D=A4 =F0=9F=98=80</p>
+</html>
+
+------=_Part_2_1357924680
+Content-Type: text/plain; name="ascii-only.txt"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename="ascii-only.txt"
+
+Characters used: A-Z, a-z, 0-9
+Special ASCII: ! @ # $ % ^ & * ( ) - _ + = [ ] { } | \ : ; " ' < > , . ? /
+
+------=_Part_2_1357924680
+Content-Type: text/csv; name="data.csv"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: attachment; filename="data.csv"
+
+=E4=B8=AD=E6=96=87,chinese@example.cn,=E5=8C=97=E4=BA=AC,China
+
+------=_Part_2_1357924680
+Content-Type: application/json; name="config.json"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: attachment; filename="config.json"
+
+{
+  "messages": {
+    "welcome": "Bienvenue =C3=A0 notre application!",
+    "error": "Une erreur s'est produite.",
+    "success": "Op=C3=A9ration r=C3=A9ussie!"
+  }
+}
+
+------=_Part_2_1357924680--
+

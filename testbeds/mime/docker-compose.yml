@@ -1,0 +1,10 @@
+services:
+  garden: 
+    image: mime-garden:latest
+    volumes:
+      - ./garden-io:/garden-io
+    platform: linux/amd64
+    command: tail -f /dev/null
+    restart: unless-stopped
+    container_name: mime-garden-container
+

@@ -22,52 +22,58 @@ from grampar.dfafuzz import DDFACoverage, fuzz_dfa
 """
   Configurations
 """
-MIME_CONTAINER_NAME = "mime-garden"
+MIME_CONTAINER_NAME = "mime-garden-container"
+
+MIME_GARDEN_PATH = os.getenv("MIME_GARDEN_PATH", "")
+if not MIME_GARDEN_PATH:
+    print("MIME_GARDEN_PATH environment variable is not set.")
+    exit(1)
 
 IGNORE_FILENAME = True
 
 fuzz_targets = {
     "mimekit-parser": {
         "name": "mimekit-parser",
-        "cwd": "{MIME_GARDEN_PATH}/parsers/csharp/mimekit-parser",
+        "cwd": "csharp/mimekit-parser",
         "execute_str": "dotnet run ---project mimekit-parser.csproj -i {input_path} -o {output_path}",
     },
     "apache-common-parser": {
         "name": "apache-common-parser",
-        "cwd": "{MIME_GARDEN_PATH}/parsers/java/apache-common-parser/target",
+        "cwd": "java/apache-common-parser/target",
         "execute_str": "java -jar MimeKit-parser-1.0-SNAPSHOT.jar -i {input_path} -o {output_path}",
     },
     "php-mime-mail-parser": {
         "name": "php-mime-mail-parser",
-        "cwd": "{MIME_GARDEN_PATH}/parsers/php/php-mime-mail-parser",
+        "cwd": "php/php-mime-mail-parser",
         "execute_str": "php index.php -i {input_path} -o {output_path}",
     },
     "mailparser-parser": {
         "name": "mailparser-parser",
-        "cwd": "{MIME_GARDEN_PATH}/parsers/javascript/mailparser-parser",
+        "cwd": "javascript/mailparser-parser",
         "execute_str": "node index.js -i {input_path} -o {output_path}",
     },
     "postal-mime-parser": {
         "name": "mailparser-parser",
-        "cwd": "{MIME_GARDEN_PATH}/parsers/javascript/postal-mime-parser",
+        "cwd": "javascript/postal-mime-parser",
         "execute_str": "node index.mjs {input_path} {output_path}",
     },
     "email-parser": {
         "name": "email-parser",
-        "cwd": "{MIME_GARDEN_PATH}/parsers/python/email-parser",
+        "cwd": "python/email-parser",
         "execute_str": "python main.py -i {input_path} -o {output_path}",
     },
 }
 
 
-"""
-  Paths
-"""
-MIME_GARDEN_PATH = os.getenv("MIME_GARDEN_PATH", "")
-if not MIME_GARDEN_PATH:
-    print("MIME_GARDEN_PATH environment variable is not set.")
-    exit(1)
-
+def get_container(container_name):
+    client = docker.from_env()
+    try:
+        container = client.containers.get(container_name)
+        return container
+    except Exception as e:
+        print(f"failed to get container id for {container_name}", file=sys.stderr)
+        print(f"reason: {e}", file=sys.stderr)
+        sys.exit(1)
 
 
 def get_mime_parser_result(output_dir: str)-> Tuple[bool, Mapping[str, bytes]]:
@@ -136,23 +142,24 @@ def test_mime_parser(parsers: List[str],
     def _get_rand_str(size=5):
         return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(5))
 
+    container = get_container(MIME_CONTAINER_NAME) 
+
+    rand_str = _get_rand_str()
+    workdir = f"{MIME_GARDEN_PATH}/garden-io/mime-{rand_str}/"
+    if os.path.isdir(workdir):
+        shutil.rmtree(workdir)
+
+    output_dir = f"{workdir}/output"
+    os.makedirs(output_dir, exist_ok=True)
+
+    mime_file = f"{workdir}/mime_file"
+
     # Write the mime to a tmp file
-    mime_file = '/tmp/mime_' + _get_rand_str()
     with open(mime_file, "wb") as fd:
         if type(mime) == str:
             fd.write(mime.encode('utf8'))
         else:
             fd.write(mime)
-
-    # Create output dir
-    output_dir = '/tmp/mime_out_' + _get_rand_str()
-    if os.path.exists(output_dir):
-        try:
-            shutil.rmtree(output_dir)
-        except OSError as e:
-            logger.error(f"Error: {e}")
-            shutil.rmtree(mime_file)
-            exit(1)
 
     mime_results = {}
     full_output = ""
@@ -165,16 +172,30 @@ def test_mime_parser(parsers: List[str],
         p_outdir = f"{output_dir}/{parser}/"
         os.makedirs(p_outdir, exist_ok=True)
 
+        container_file = mime_file.replace(MIME_GARDEN_PATH, "/")
+        container_outdir = p_outdir.replace(MIME_GARDEN_PATH, "/")
         target = fuzz_targets[parser]
-        cmd = target["execute_str"].format(input_path=mime_file, output_path=p_outdir)
-        cwd = target["cwd"].format(MIME_GARDEN_PATH=MIME_GARDEN_PATH)
+        cmd = target["execute_str"].format(input_path=container_file, 
+                                           output_path=container_outdir)
+        cwd = target["cwd"]
+        docker_cmd = f"/bin/bash -c \"cd {cwd} && {cmd}\""
 
-        logger.debug(f"{parser}: {cmd}")
-        p = Popen(cmd, cwd=cwd, shell=True, stdout=PIPE, stderr=PIPE)
-        out, err = p.communicate()
-        logger.debug(f"{parser} out: \n" + out.decode())
-        if err:
-            logger.warning(f"{parser} err: \n" + err.decode())
+        client = docker.from_env()
+        try:
+            logger.debug(f"[*] Running: {cmd}")
+            exec_log = client.api.exec_create(container.id, docker_cmd)
+            output = client.api.exec_start(exec_log['Id']).decode()
+            logger.debug(f"[*] Output:\n{output}")
+        except Exception as e:
+            logger.error(f"failed to run {docker_cmd}")
+            logger.error(f"reason: {e}")
+
+        #logger.debug(f"{parser}: {cmd}")
+        #p = Popen(cmd, cwd=cwd, shell=True, stdout=PIPE, stderr=PIPE)
+        #out, err = p.communicate()
+        #logger.debug(f"{parser} out: \n" + out.decode())
+        #if err:
+        #    logger.warning(f"{parser} err: \n" + err.decode())
 
         mime_results[parser] = get_mime_parser_result(p_outdir)
         msg = f"\n* {parser}:\n" + repr(mime_results[parser][1]) + "\n"
@@ -231,7 +252,8 @@ def fuzz_mime(lex_filename: str="mime.l",
 
     full_count = 0
     for seed in seeds:
-        #test_mime_parser(parsers, seed, verbose)
+        test_mime_parser(parsers, seed, verbose=True)
+        break
         #full_count, query_id, interesting = fuzz_dfa(mma, full_count,
         full_count, query_id,_ = fuzz_dfa(mma, full_count,
                                           seed, cov_addr,
@@ -272,7 +294,8 @@ if __name__ == '__main__':
     logger.add(sys.stderr, 
                filter={
                    "grampar.dfafuzz": "ERROR", 
-                   "": "INFO",
+                   #"": "INFO",
+                   "": "DEBUG",
                  }
                )
     main()

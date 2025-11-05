@@ -1,0 +1,25 @@
+MIME-Version: 1.0
+From: sender@example.com
+To: recipient@example.com
+Subject: Simple text attachment
+Date: Thu, 14 Aug 2025 10:30:00 +0000
+Content-Type: multipart/mixed; boundary="----=_Part_0_1234567890"
+
+------=_Part_0_1234567890
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+
+Simple email.
+
+------=_Part_0_1234567890
+Content-Type: text/plain; name="readme.txt"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename="readme.txt"
+
+Line 1
+Line 2
+Line 3
+
+End of file.
+------=_Part_0_1234567890--
+

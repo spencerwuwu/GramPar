@@ -30,7 +30,7 @@ RUN apt install maven -y
 
 ARG USER_ID=1000
 
-RUN mkdir -p /home/user && \
+RUN mkdir -p /home/user  && \
 	useradd -l -u ${USER_ID} -K UMASK=0000 user
 
 RUN	echo "user:user" | chpasswd && usermod -a -G sudo user && \

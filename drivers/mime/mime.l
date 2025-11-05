@@ -1,0 +1,51 @@
+%{
+/* Fixed MIME Lexer - Actually matches examples */
+%}
+
+/* Basic characters */
+CRLF            \r?\n
+WSP             [ \t]
+
+/* Simple content patterns */
+PRINTABLE       [ -~]
+TEXT_LINE       {PRINTABLE}*{CRLF}
+EMPTY_LINE      {WSP}*{CRLF}
+
+/* Header pattern - very simple */
+HEADER_NAME     [a-zA-Z][-a-zA-Z0-9]*
+HEADER_VALUE    {PRINTABLE}*
+HEADER          {HEADER_NAME}:{WSP}*{HEADER_VALUE}{CRLF}
+
+/* Body patterns */
+BASE64_CHAR     [A-Za-z0-9+/=]
+BASE64_LINE     {BASE64_CHAR}+{CRLF}
+NORMAL_LINE     {TEXT_LINE}
+/* NORMAL_LINE     [^\r\n]*{CRLF} */
+
+/* Boundary patterns */
+DASH            -
+BOUNDARY_CHARS  [a-zA-Z0-9_-]
+BOUNDARY_NAME   {BOUNDARY_CHARS}+
+BOUNDARY_START  {DASH}{DASH}{BOUNDARY_NAME}{CRLF}
+BOUNDARY_END    {DASH}{DASH}{BOUNDARY_NAME}{DASH}{DASH}{CRLF}
+
+/* Complete patterns */
+HEADERS_SECTION {HEADER}+{EMPTY_LINE}
+BODY_SECTION    {NORMAL_LINE}+
+MULTIPART_PART  {BOUNDARY_START}({HEADER}+{EMPTY_LINE})?{BODY_SECTION}?
+MULTIPART_MSG   {HEADERS_SECTION}{MULTIPART_PART}+{BOUNDARY_END}
+
+/* Top level patterns */
+SIMPLE_BODY     {BODY_SECTION}
+HEADERS_ONLY    {HEADERS_SECTION} 
+HEADERS_BODY    {HEADERS_SECTION}{BODY_SECTION}
+MULTIPART       {MULTIPART_MSG}
+
+/* Final pattern */
+MIME_MESSAGE    {SIMPLE_BODY}|{HEADERS_ONLY}|{HEADERS_BODY}|{MULTIPART}
+
+%%
+
+{MIME_MESSAGE} {ACCEPT;}
+
+%%

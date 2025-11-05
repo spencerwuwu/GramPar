@@ -1,0 +1,48 @@
+MIME-Version: 1.0
+From: sender@example.com
+To: recipient@example.com
+Subject: Mixed encoding demonstration
+Date: Thu, 14 Aug 2025 14:45:00 +0000
+Content-Type: multipart/mixed; boundary="----=_Part_4_9988776655"
+
+------=_Part_4_9988776655
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+This demonstrates different text encodings without using base64.
+
+------=_Part_4_9988776655
+Content-Type: text/plain; name="log-file.txt"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename="log-file.txt"
+
+Application Log File
+===================
+
+[2025-08-14 10:00:01] INFO: Application started
+
+------=_Part_4_9988776655
+Content-Type: text/xml; name="settings.xml"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: attachment; filename="settings.xml"
+
+<?xml version=3D"1.0" encoding=3D"UTF-8"?>
+<configuration>
+  <symbols>
+    <copyright>=C2=A9 2025 Company Name</copyright>
+    <currency default=3D"=E2=82=AC">Euro</currency>
+  </symbols>
+</configuration>
+
+------=_Part_4_9988776655
+Content-Type: text/html; name="template.html"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: attachment; filename="template.html"
+
+<!DOCTYPE html>
+<html lang=3D"en">
+    <p>Mathematical: =E2=88=9E =E2=89=88 =E2=89=A0 =E2=89=A4 =E2=89=A5</p>
+</html>
+
+------=_Part_4_9988776655--
+

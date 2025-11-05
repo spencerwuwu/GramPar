@@ -1,0 +1,25 @@
+MIME-Version: 1.0
+From: sender@example.com
+To: recipient@example.com
+Subject: Unusual quoted-printable binary
+Date: Thu, 14 Aug 2025 15:30:00 +0000
+Content-Type: multipart/mixed; boundary="----=_Part_5_1122334455"
+
+------=_Part_5_1122334455
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+
+This example shows how binary-like content might be encoded with quoted-printable
+instead of base64 (though base64 is more common for binary data).
+
+------=_Part_5_1122334455
+Content-Type: application/octet-stream; name="binary-data.bin"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: attachment; filename="binary-data.bin"
+
+=00=01=02=03=04=05=06=07=08=09=0A=0B=0C=0D=0E=0F
+=10=11=12=13=14=15=16=17=18=19=1A=1B=1C=1D=1E=1F
+=FF=FE=FD=FC=FB=FA=F9=F8=F7=F6=F5=F4=F3=F2=F1=F0
+
+------=_Part_5_1122334455--
+
