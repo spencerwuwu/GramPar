@@ -43,10 +43,9 @@ COPY --chown=user:user parsers/ /home/user/parsers/
 WORKDIR /home/user/parsers
 
 # Install parsers dependencies
-RUN cd /home/user/parsers/javascript/postal-mime-parser && npm install
 RUN pip install --break-system-packages standard-imghdr mail-parser flanker
 RUN cd /home/user/parsers/java/apache-common-parser && mvn package
 RUN cd /home/user/parsers/csharp/mimekit-parser && dotnet build
 RUN cd /home/user/parsers/php/php-mime-mail-parser && composer require php-mime-mail-parser/php-mime-mail-parser
-
-
+RUN cd /home/user/parsers/javascript/postal-mime-parser && npm install
+RUN cd /home/user/parsers/javascript/mailparser-parser && npm install 

@@ -10,7 +10,6 @@ import shutil
 import codecs
 import docker
 from typing import List, Tuple, Dict, Mapping
-from subprocess import Popen, PIPE
 
 from loguru import logger
 
@@ -60,7 +59,7 @@ fuzz_targets = {
     "email-parser": {
         "name": "email-parser",
         "cwd": "python/email-parser",
-        "execute_str": "python main.py -i {input_path} -o {output_path}",
+        "execute_str": "python3 main.py -i {input_path} -o {output_path}",
     },
 }
 
@@ -147,7 +146,9 @@ def test_mime_parser(parsers: List[str],
     rand_str = _get_rand_str()
     workdir = f"{MIME_GARDEN_PATH}/garden-io/mime-{rand_str}/"
     if os.path.isdir(workdir):
-        shutil.rmtree(workdir)
+        rand_str = _get_rand_str()
+        workdir = f"{MIME_GARDEN_PATH}/garden-io/mime-{rand_str}/"
+        #shutil.rmtree(workdir)
 
     output_dir = f"{workdir}/output"
     os.makedirs(output_dir, exist_ok=True)
@@ -190,13 +191,6 @@ def test_mime_parser(parsers: List[str],
             logger.error(f"failed to run {docker_cmd}")
             logger.error(f"reason: {e}")
 
-        #logger.debug(f"{parser}: {cmd}")
-        #p = Popen(cmd, cwd=cwd, shell=True, stdout=PIPE, stderr=PIPE)
-        #out, err = p.communicate()
-        #logger.debug(f"{parser} out: \n" + out.decode())
-        #if err:
-        #    logger.warning(f"{parser} err: \n" + err.decode())
-
         mime_results[parser] = get_mime_parser_result(p_outdir)
         msg = f"\n* {parser}:\n" + repr(mime_results[parser][1]) + "\n"
         full_output += msg + "\n" + "-"*10 + "\n"
@@ -213,8 +207,7 @@ def test_mime_parser(parsers: List[str],
         mime_results[k] = (has_attch, repr_contents)
 
     if not verbose:
-        os.remove(mime_file)
-        shutil.rmtree(output_dir)
+        shutil.rmtree(workdir)
     if not all(diff.values()):
         logger.debug("++ DIFF!")
         logger.debug("\n{}", mime)
@@ -222,51 +215,6 @@ def test_mime_parser(parsers: List[str],
             print(full_output)
     return diff, mime_results, full_output
 
-
-def fuzz_mime(lex_filename: str="mime.l",
-              parsers: List=[str],
-              output_dir: str="./output",
-              seed_dir: str="./seeds_mime-simple/",
-              test_method=test_mime_parser,
-              verbose: bool=False
-              ):
-
-    if not setup_output_dir(output_dir):
-        exit(1)
-
-    flex_a = Flexparser(get_common_unicode())
-    mma = flex_a.yyparse(lex_filename)
-
-    # readin seed requests
-    seeds = []
-    for f in os.listdir(seed_dir):
-        with open(f"{seed_dir}/{f}", "r") as fd:
-            #data = fd.read().replace("\n", "\r\n")
-            data = fd.read()
-            seeds.append(data)
-
-    cov_addr = DDFACoverage(mma)
-
-    all_interesting = []
-    query_id = 0
-
-    full_count = 0
-    for seed in seeds:
-        test_mime_parser(parsers, seed, verbose=True)
-        break
-        #full_count, query_id, interesting = fuzz_dfa(mma, full_count,
-        full_count, query_id,_ = fuzz_dfa(mma, full_count,
-                                          seed, cov_addr,
-                                          parsers, output_dir, query_id, 
-                                          test_method,
-                                          verbose=verbose)
-
-    #print("")
-    #print("NEXT_INTERESTING:")
-    #for q in all_interesting:
-    #    print(q)
-    #print("TOTAL QUERIES:", full_count)
-    
 
 def main():
     parsers = [
@@ -282,20 +230,26 @@ def main():
                # python
                "email-parser",
                ]
-    fuzz_mime("mime.l", 
-              parsers, 
-              "./output", 
-              "./seeds_mime-simple",
-              test_mime_parser,
-              verbose=False)
+
+    seed_dir = "./seeds_mime-simple/"
+
+    seeds = []
+    for f in os.listdir(seed_dir):
+        with open(f"{seed_dir}/{f}", "r") as fd:
+            #data = fd.read().replace("\n", "\r\n")
+            data = fd.read()
+            seeds.append(data)
+
+    for seed in seeds:
+        test_mime_parser(parsers, seed, verbose=True)
+
 
 if __name__ == '__main__':
     logger.remove()
     logger.add(sys.stderr, 
                filter={
                    "grampar.dfafuzz": "ERROR", 
-                   #"": "INFO",
-                   "": "DEBUG",
+                   "": "INFO",
                  }
                )
     main()
