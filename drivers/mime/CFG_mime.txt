@@ -1,0 +1,67 @@
+S -> MimeMessage
+MimeMessage -> SimpleBody | HeadersOnly | HeadersBody | Multipart
+Header_star -> Header Header_star | ε
+Header_plus -> Header Header_star
+HeadersOnly -> Header_plus
+ANTLR_new_1 -> crlf | lf
+BlankLine -> ANTLR_new_1
+HeadersBody -> Header_plus BlankLine MimeBody
+SimpleBody -> MimeBody
+Preamble_opt -> Preamble | ε
+Part_star -> Part Part_star | ε
+Part_plus -> Part Part_star
+ANTLR_new_2 -> crlf | lf
+ANTLR_new_2_opt -> ANTLR_new_2 | ε
+Epilogue_opt -> Epilogue | ε
+Multipart -> Header_plus BlankLine Preamble_opt Part_plus BoundaryLine ANTLR_new_2_opt Epilogue_opt
+Wsp_star -> wsp Wsp_star | ε
+ANTLR_new_3 -> crlf | lf
+Header -> HeaderName colon Wsp_star HeaderValue ANTLR_new_3
+ANTLR_new_4 -> underline word
+ANTLR_new_4_star -> ANTLR_new_4 ANTLR_new_4_star | ε
+HeaderName -> word ANTLR_new_4_star
+Semicolon_opt -> semicolon | ε
+ANTLR_new_5 -> Wsp_star Parameter
+ANTLR_new_5_star -> ANTLR_new_5 ANTLR_new_5_star | ε
+HeaderValue -> HeaderValueContent Wsp_star Semicolon_opt ANTLR_new_5_star | ε
+ANTLR_new_6 -> Wsp_star HeaderValuePart
+ANTLR_new_6_star -> ANTLR_new_6 ANTLR_new_6_star | ε
+HeaderValueContent -> HeaderValuePart ANTLR_new_6_star
+ANTLR_new_7 -> word | special_token | version | digits | MediaType | Comment | slash | comma | period | langle | rangle | colon | equals | underline
+ANTLR_new_7_star -> ANTLR_new_7 ANTLR_new_7_star | ε
+ANTLR_new_7_plus -> ANTLR_new_7 ANTLR_new_7_star
+HeaderValuePart -> ANTLR_new_7_plus | QuotedString
+MediaType -> word slash word
+QuotedStringContent_star -> QuotedStringContent QuotedStringContent_star | ε
+ANTLR_new_8 -> quote_end
+ANTLR_new_8_opt -> ANTLR_new_8 | ε
+QuotedString -> quote_start QuotedStringContent_star ANTLR_new_8_opt
+QuotedStringContent -> quoted_content | quoted_escape
+CommentContent_star -> CommentContent CommentContent_star | ε
+Comment -> lparen CommentContent_star rparen
+CommentContent -> word | special_token | digits | comment_char | wsp | Comment | EscapedChar | colon | semicolon | slash | equals | comma | langle | rangle
+ANTLR_new_9 -> lparen | rparen | backslash | comment_char
+EscapedChar -> backslash ANTLR_new_9
+Parameter -> word Wsp_star equals Wsp_star ParameterValue Wsp_star Semicolon_opt
+ParameterValue -> HeaderValuePart
+Preamble -> BodyContent
+ANTLR_new_10 -> crlf | lf
+ANTLR_new_11 -> Header_plus BlankLine
+ANTLR_new_11_opt -> ANTLR_new_11 | ε
+ANTLR_new_12 -> BodyContent | Multipart
+ANTLR_new_12_opt -> ANTLR_new_12 | ε
+Part -> BoundaryLine ANTLR_new_10 ANTLR_new_11_opt ANTLR_new_12_opt
+Epilogue -> BodyContent
+BoundaryLine -> boundary_line
+MimeBody -> BodyContent
+BodyLine_star -> BodyLine BodyLine_star | ε
+BodyLine_plus -> BodyLine BodyLine_star
+BodyContent -> BodyLine_plus
+ContentData_star -> ContentData ContentData_star | ε
+ContentData_plus -> ContentData ContentData_star
+ANTLR_new_13 -> crlf | lf | quote_end
+BodyLine -> ContentData_plus ANTLR_new_13 | BlankLine
+ANTLR_new_14 -> wsp | fws | word | digits | special_token | content_char | colon | semicolon | slash | equals | comma | lparen | rparen | langle | rangle | period | double_dash | underline | backslash | QuotedString
+ANTLR_new_14_star -> ANTLR_new_14 ANTLR_new_14_star | ε
+ANTLR_new_14_plus -> ANTLR_new_14 ANTLR_new_14_star
+ContentData -> ANTLR_new_14_plus
