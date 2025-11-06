@@ -6,14 +6,14 @@ options {
 
 
 // Entry point
-session         : command;
+session         : command+;
 
 // === SMTP Commands ===
 command         : ( helo | ehlo )
-                 mailFrom
-                 rcptTo+
-                 dataCmd
-                 quit
+                | mailFrom
+                | rcptTo
+                | dataCmd
+                | quit
                 ;
 
 helo            : HELO SP domain CRLF;

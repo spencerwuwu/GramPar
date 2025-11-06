@@ -13,50 +13,51 @@ def serializedATN():
         4,1,26,186,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,
         6,2,7,7,7,2,8,7,8,2,9,7,9,2,10,7,10,2,11,7,11,2,12,7,12,2,13,7,13,
         2,14,7,14,2,15,7,15,2,16,7,16,2,17,7,17,2,18,7,18,2,19,7,19,2,20,
-        7,20,2,21,7,21,2,22,7,22,2,23,7,23,1,0,1,0,1,1,1,1,3,1,53,8,1,1,
-        1,1,1,4,1,57,8,1,11,1,12,1,58,1,1,1,1,1,1,1,2,1,2,1,2,1,2,1,2,1,
-        3,1,3,1,3,1,3,1,3,1,4,1,4,1,4,1,4,1,4,1,5,1,5,1,5,1,5,1,5,1,6,1,
-        6,1,6,1,6,1,6,1,6,1,7,1,7,1,7,1,8,1,8,3,8,95,8,8,1,8,1,8,1,9,1,9,
-        1,9,1,9,1,10,3,10,104,8,10,1,10,3,10,107,8,10,1,10,1,10,1,11,1,11,
-        1,11,5,11,114,8,11,10,11,12,11,117,9,11,1,12,1,12,1,12,1,13,1,13,
-        1,13,1,13,1,14,1,14,1,14,5,14,129,8,14,10,14,12,14,132,9,14,1,15,
-        4,15,135,8,15,11,15,12,15,136,1,16,1,16,1,16,5,16,142,8,16,10,16,
-        12,16,145,9,16,1,17,1,17,5,17,149,8,17,10,17,12,17,152,9,17,1,18,
-        1,18,3,18,156,8,18,1,19,1,19,1,19,5,19,161,8,19,10,19,12,19,164,
+        7,20,2,21,7,21,2,22,7,22,2,23,7,23,1,0,4,0,50,8,0,11,0,12,0,51,1,
+        1,1,1,3,1,56,8,1,1,1,1,1,1,1,1,1,3,1,62,8,1,1,2,1,2,1,2,1,2,1,2,
+        1,3,1,3,1,3,1,3,1,3,1,4,1,4,1,4,1,4,1,4,1,5,1,5,1,5,1,5,1,5,1,6,
+        1,6,1,6,1,6,1,6,1,6,1,7,1,7,1,7,1,8,1,8,3,8,95,8,8,1,8,1,8,1,9,1,
+        9,1,9,1,9,1,10,3,10,104,8,10,1,10,3,10,107,8,10,1,10,1,10,1,11,1,
+        11,1,11,5,11,114,8,11,10,11,12,11,117,9,11,1,12,1,12,1,12,1,13,1,
+        13,1,13,1,13,1,14,1,14,1,14,5,14,129,8,14,10,14,12,14,132,9,14,1,
+        15,4,15,135,8,15,11,15,12,15,136,1,16,1,16,1,16,5,16,142,8,16,10,
+        16,12,16,145,9,16,1,17,1,17,5,17,149,8,17,10,17,12,17,152,9,17,1,
+        18,1,18,3,18,156,8,18,1,19,1,19,1,19,5,19,161,8,19,10,19,12,19,164,
         9,19,1,20,4,20,167,8,20,11,20,12,20,168,1,21,1,21,1,21,5,21,174,
         8,21,10,21,12,21,177,9,21,1,21,1,21,1,22,1,22,1,23,1,23,1,23,1,23,
         0,0,24,0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,
         42,44,46,0,4,1,0,13,13,2,0,18,18,23,24,2,0,18,18,23,25,3,0,10,13,
-        18,19,22,26,176,0,48,1,0,0,0,2,52,1,0,0,0,4,63,1,0,0,0,6,68,1,0,
+        18,19,22,26,180,0,49,1,0,0,0,2,61,1,0,0,0,4,63,1,0,0,0,6,68,1,0,
         0,0,8,73,1,0,0,0,10,78,1,0,0,0,12,83,1,0,0,0,14,89,1,0,0,0,16,92,
         1,0,0,0,18,98,1,0,0,0,20,103,1,0,0,0,22,110,1,0,0,0,24,118,1,0,0,
         0,26,121,1,0,0,0,28,130,1,0,0,0,30,134,1,0,0,0,32,138,1,0,0,0,34,
         146,1,0,0,0,36,155,1,0,0,0,38,157,1,0,0,0,40,166,1,0,0,0,42,170,
-        1,0,0,0,44,180,1,0,0,0,46,182,1,0,0,0,48,49,3,2,1,0,49,1,1,0,0,0,
-        50,53,3,4,2,0,51,53,3,6,3,0,52,50,1,0,0,0,52,51,1,0,0,0,53,54,1,
-        0,0,0,54,56,3,8,4,0,55,57,3,10,5,0,56,55,1,0,0,0,57,58,1,0,0,0,58,
-        56,1,0,0,0,58,59,1,0,0,0,59,60,1,0,0,0,60,61,3,12,6,0,61,62,3,14,
-        7,0,62,3,1,0,0,0,63,64,5,1,0,0,64,65,5,22,0,0,65,66,3,32,16,0,66,
-        67,5,19,0,0,67,5,1,0,0,0,68,69,5,2,0,0,69,70,5,22,0,0,70,71,3,32,
-        16,0,71,72,5,19,0,0,72,7,1,0,0,0,73,74,5,3,0,0,74,75,5,10,0,0,75,
-        76,3,16,8,0,76,77,5,19,0,0,77,9,1,0,0,0,78,79,5,4,0,0,79,80,5,10,
-        0,0,80,81,3,18,9,0,81,82,5,19,0,0,82,11,1,0,0,0,83,84,5,5,0,0,84,
-        85,5,19,0,0,85,86,3,28,14,0,86,87,5,13,0,0,87,88,5,19,0,0,88,13,
-        1,0,0,0,89,90,5,9,0,0,90,91,5,19,0,0,91,15,1,0,0,0,92,94,5,11,0,
-        0,93,95,3,20,10,0,94,93,1,0,0,0,94,95,1,0,0,0,95,96,1,0,0,0,96,97,
-        5,12,0,0,97,17,1,0,0,0,98,99,5,11,0,0,99,100,3,20,10,0,100,101,5,
-        12,0,0,101,19,1,0,0,0,102,104,3,22,11,0,103,102,1,0,0,0,103,104,
-        1,0,0,0,104,106,1,0,0,0,105,107,5,10,0,0,106,105,1,0,0,0,106,107,
-        1,0,0,0,107,108,1,0,0,0,108,109,3,26,13,0,109,21,1,0,0,0,110,115,
-        3,24,12,0,111,112,5,14,0,0,112,114,3,24,12,0,113,111,1,0,0,0,114,
-        117,1,0,0,0,115,113,1,0,0,0,115,116,1,0,0,0,116,23,1,0,0,0,117,115,
-        1,0,0,0,118,119,5,15,0,0,119,120,3,32,16,0,120,25,1,0,0,0,121,122,
-        3,36,18,0,122,123,5,15,0,0,123,124,3,32,16,0,124,27,1,0,0,0,125,
-        126,3,30,15,0,126,127,5,19,0,0,127,129,1,0,0,0,128,125,1,0,0,0,129,
-        132,1,0,0,0,130,128,1,0,0,0,130,131,1,0,0,0,131,29,1,0,0,0,132,130,
-        1,0,0,0,133,135,8,0,0,0,134,133,1,0,0,0,135,136,1,0,0,0,136,134,
-        1,0,0,0,136,137,1,0,0,0,137,31,1,0,0,0,138,143,3,34,17,0,139,140,
-        5,13,0,0,140,142,3,34,17,0,141,139,1,0,0,0,142,145,1,0,0,0,143,141,
+        1,0,0,0,44,180,1,0,0,0,46,182,1,0,0,0,48,50,3,2,1,0,49,48,1,0,0,
+        0,50,51,1,0,0,0,51,49,1,0,0,0,51,52,1,0,0,0,52,1,1,0,0,0,53,56,3,
+        4,2,0,54,56,3,6,3,0,55,53,1,0,0,0,55,54,1,0,0,0,56,62,1,0,0,0,57,
+        62,3,8,4,0,58,62,3,10,5,0,59,62,3,12,6,0,60,62,3,14,7,0,61,55,1,
+        0,0,0,61,57,1,0,0,0,61,58,1,0,0,0,61,59,1,0,0,0,61,60,1,0,0,0,62,
+        3,1,0,0,0,63,64,5,1,0,0,64,65,5,22,0,0,65,66,3,32,16,0,66,67,5,19,
+        0,0,67,5,1,0,0,0,68,69,5,2,0,0,69,70,5,22,0,0,70,71,3,32,16,0,71,
+        72,5,19,0,0,72,7,1,0,0,0,73,74,5,3,0,0,74,75,5,10,0,0,75,76,3,16,
+        8,0,76,77,5,19,0,0,77,9,1,0,0,0,78,79,5,4,0,0,79,80,5,10,0,0,80,
+        81,3,18,9,0,81,82,5,19,0,0,82,11,1,0,0,0,83,84,5,5,0,0,84,85,5,19,
+        0,0,85,86,3,28,14,0,86,87,5,13,0,0,87,88,5,19,0,0,88,13,1,0,0,0,
+        89,90,5,9,0,0,90,91,5,19,0,0,91,15,1,0,0,0,92,94,5,11,0,0,93,95,
+        3,20,10,0,94,93,1,0,0,0,94,95,1,0,0,0,95,96,1,0,0,0,96,97,5,12,0,
+        0,97,17,1,0,0,0,98,99,5,11,0,0,99,100,3,20,10,0,100,101,5,12,0,0,
+        101,19,1,0,0,0,102,104,3,22,11,0,103,102,1,0,0,0,103,104,1,0,0,0,
+        104,106,1,0,0,0,105,107,5,10,0,0,106,105,1,0,0,0,106,107,1,0,0,0,
+        107,108,1,0,0,0,108,109,3,26,13,0,109,21,1,0,0,0,110,115,3,24,12,
+        0,111,112,5,14,0,0,112,114,3,24,12,0,113,111,1,0,0,0,114,117,1,0,
+        0,0,115,113,1,0,0,0,115,116,1,0,0,0,116,23,1,0,0,0,117,115,1,0,0,
+        0,118,119,5,15,0,0,119,120,3,32,16,0,120,25,1,0,0,0,121,122,3,36,
+        18,0,122,123,5,15,0,0,123,124,3,32,16,0,124,27,1,0,0,0,125,126,3,
+        30,15,0,126,127,5,19,0,0,127,129,1,0,0,0,128,125,1,0,0,0,129,132,
+        1,0,0,0,130,128,1,0,0,0,130,131,1,0,0,0,131,29,1,0,0,0,132,130,1,
+        0,0,0,133,135,8,0,0,0,134,133,1,0,0,0,135,136,1,0,0,0,136,134,1,
+        0,0,0,136,137,1,0,0,0,137,31,1,0,0,0,138,143,3,34,17,0,139,140,5,
+        13,0,0,140,142,3,34,17,0,141,139,1,0,0,0,142,145,1,0,0,0,143,141,
         1,0,0,0,143,144,1,0,0,0,144,33,1,0,0,0,145,143,1,0,0,0,146,150,5,
         23,0,0,147,149,7,1,0,0,148,147,1,0,0,0,149,152,1,0,0,0,150,148,1,
         0,0,0,150,151,1,0,0,0,151,35,1,0,0,0,152,150,1,0,0,0,153,156,3,38,
@@ -69,7 +70,8 @@ def serializedATN():
         1,0,0,0,174,177,1,0,0,0,175,173,1,0,0,0,175,176,1,0,0,0,176,178,
         1,0,0,0,177,175,1,0,0,0,178,179,5,16,0,0,179,43,1,0,0,0,180,181,
         7,3,0,0,181,45,1,0,0,0,182,183,5,17,0,0,183,184,9,0,0,0,184,47,1,
-        0,0,0,15,52,58,94,103,106,115,130,136,143,150,155,162,168,173,175
+        0,0,0,16,51,55,61,94,103,106,115,130,136,143,150,155,162,168,173,
+        175
     ]
 
 class SMTPParser ( Parser ):
@@ -168,8 +170,11 @@ class SMTPParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def command(self):
-            return self.getTypedRuleContext(SMTPParser.CommandContext,0)
+        def command(self, i:int=None):
+            if i is None:
+                return self.getTypedRuleContexts(SMTPParser.CommandContext)
+            else:
+                return self.getTypedRuleContext(SMTPParser.CommandContext,i)
 
 
         def getRuleIndex(self):
@@ -190,10 +195,21 @@ class SMTPParser ( Parser ):
 
         localctx = SMTPParser.SessionContext(self, self._ctx, self.state)
         self.enterRule(localctx, 0, self.RULE_session)
+        self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 48
-            self.command()
+            self.state = 49 
+            self._errHandler.sync(self)
+            _la = self._input.LA(1)
+            while True:
+                self.state = 48
+                self.command()
+                self.state = 51 
+                self._errHandler.sync(self)
+                _la = self._input.LA(1)
+                if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & 574) != 0)):
+                    break
+
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -210,18 +226,6 @@ class SMTPParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def mailFrom(self):
-            return self.getTypedRuleContext(SMTPParser.MailFromContext,0)
-
-
-        def dataCmd(self):
-            return self.getTypedRuleContext(SMTPParser.DataCmdContext,0)
-
-
-        def quit(self):
-            return self.getTypedRuleContext(SMTPParser.QuitContext,0)
-
-
         def helo(self):
             return self.getTypedRuleContext(SMTPParser.HeloContext,0)
 
@@ -230,11 +234,20 @@ class SMTPParser ( Parser ):
             return self.getTypedRuleContext(SMTPParser.EhloContext,0)
 
 
-        def rcptTo(self, i:int=None):
-            if i is None:
-                return self.getTypedRuleContexts(SMTPParser.RcptToContext)
-            else:
-                return self.getTypedRuleContext(SMTPParser.RcptToContext,i)
+        def mailFrom(self):
+            return self.getTypedRuleContext(SMTPParser.MailFromContext,0)
+
+
+        def rcptTo(self):
+            return self.getTypedRuleContext(SMTPParser.RcptToContext,0)
+
+
+        def dataCmd(self):
+            return self.getTypedRuleContext(SMTPParser.DataCmdContext,0)
+
+
+        def quit(self):
+            return self.getTypedRuleContext(SMTPParser.QuitContext,0)
 
 
         def getRuleIndex(self):
@@ -255,41 +268,50 @@ class SMTPParser ( Parser ):
 
         localctx = SMTPParser.CommandContext(self, self._ctx, self.state)
         self.enterRule(localctx, 2, self.RULE_command)
-        self._la = 0 # Token type
         try:
-            self.enterOuterAlt(localctx, 1)
-            self.state = 52
+            self.state = 61
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [1]:
-                self.state = 50
-                self.helo()
+            if token in [1, 2]:
+                self.enterOuterAlt(localctx, 1)
+                self.state = 55
+                self._errHandler.sync(self)
+                token = self._input.LA(1)
+                if token in [1]:
+                    self.state = 53
+                    self.helo()
+                    pass
+                elif token in [2]:
+                    self.state = 54
+                    self.ehlo()
+                    pass
+                else:
+                    raise NoViableAltException(self)
+
                 pass
-            elif token in [2]:
-                self.state = 51
-                self.ehlo()
+            elif token in [3]:
+                self.enterOuterAlt(localctx, 2)
+                self.state = 57
+                self.mailFrom()
+                pass
+            elif token in [4]:
+                self.enterOuterAlt(localctx, 3)
+                self.state = 58
+                self.rcptTo()
+                pass
+            elif token in [5]:
+                self.enterOuterAlt(localctx, 4)
+                self.state = 59
+                self.dataCmd()
+                pass
+            elif token in [9]:
+                self.enterOuterAlt(localctx, 5)
+                self.state = 60
+                self.quit()
                 pass
             else:
                 raise NoViableAltException(self)
 
-            self.state = 54
-            self.mailFrom()
-            self.state = 56 
-            self._errHandler.sync(self)
-            _la = self._input.LA(1)
-            while True:
-                self.state = 55
-                self.rcptTo()
-                self.state = 58 
-                self._errHandler.sync(self)
-                _la = self._input.LA(1)
-                if not (_la==4):
-                    break
-
-            self.state = 60
-            self.dataCmd()
-            self.state = 61
-            self.quit()
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -1089,7 +1111,7 @@ class SMTPParser ( Parser ):
                     raise NoViableAltException(self)
                 self.state = 136 
                 self._errHandler.sync(self)
-                _alt = self._interp.adaptivePredict(self._input,7,self._ctx)
+                _alt = self._interp.adaptivePredict(self._input,8,self._ctx)
 
         except RecognitionException as re:
             localctx.exception = re
@@ -1214,7 +1236,7 @@ class SMTPParser ( Parser ):
             self.match(SMTPParser.ALPHA)
             self.state = 150
             self._errHandler.sync(self)
-            _alt = self._interp.adaptivePredict(self._input,9,self._ctx)
+            _alt = self._interp.adaptivePredict(self._input,10,self._ctx)
             while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
                 if _alt==1:
                     self.state = 147
@@ -1226,7 +1248,7 @@ class SMTPParser ( Parser ):
                         self.consume() 
                 self.state = 152
                 self._errHandler.sync(self)
-                _alt = self._interp.adaptivePredict(self._input,9,self._ctx)
+                _alt = self._interp.adaptivePredict(self._input,10,self._ctx)
 
         except RecognitionException as re:
             localctx.exception = re

@@ -1,0 +1,48 @@
+S -> Session
+Command_star -> Command Command_star | ε
+Command_plus -> Command Command_star
+Session -> Command_plus
+ANTLR_new_1 -> Helo | Ehlo
+Command -> ANTLR_new_1 | MailFrom | RcptTo | DataCmd | Quit
+Helo -> helo sp Domain crlf
+Ehlo -> ehlo sp Domain crlf
+MailFrom -> mail colon ReversePath crlf
+RcptTo -> rcpt colon ForwardPath crlf
+DataCmd -> data crlf DataBody period crlf
+Quit -> quit crlf
+Path_opt -> Path | ε
+ReversePath -> langle Path_opt rangle
+ForwardPath -> langle Path rangle
+Adl_opt -> Adl | ε
+Colon_opt -> colon | ε
+Path -> Adl_opt Colon_opt Mailbox
+ANTLR_new_2 -> comma AtDomain
+ANTLR_new_2_star -> ANTLR_new_2 ANTLR_new_2_star | ε
+Adl -> AtDomain ANTLR_new_2_star
+AtDomain -> at Domain
+Mailbox -> LocalPart at Domain
+ANTLR_new_3 -> DataLine crlf
+ANTLR_new_3_star -> ANTLR_new_3 ANTLR_new_3_star | ε
+DataBody -> ANTLR_new_3_star
+Period_star -> period Period_star | ε
+Period_plus -> period Period_star
+DataLine -> Period_plus
+ANTLR_new_4 -> period SubDomain
+ANTLR_new_4_star -> ANTLR_new_4 ANTLR_new_4_star | ε
+Domain -> SubDomain ANTLR_new_4_star
+ANTLR_new_5 -> alpha | digit | dash
+ANTLR_new_5_star -> ANTLR_new_5 ANTLR_new_5_star | ε
+SubDomain -> alpha ANTLR_new_5_star
+LocalPart -> DotString | QuotedString
+ANTLR_new_6 -> period Atom
+ANTLR_new_6_star -> ANTLR_new_6 ANTLR_new_6_star | ε
+DotString -> Atom ANTLR_new_6_star
+ANTLR_new_7 -> alpha | digit | atext_pun | dash
+ANTLR_new_7_star -> ANTLR_new_7 ANTLR_new_7_star | ε
+ANTLR_new_7_plus -> ANTLR_new_7 ANTLR_new_7_star
+Atom -> ANTLR_new_7_plus
+ANTLR_new_8 -> Qtext | QuotedPair
+ANTLR_new_8_star -> ANTLR_new_8 ANTLR_new_8_star | ε
+QuotedString -> dquote ANTLR_new_8_star dquote
+Qtext -> qtext | alpha | digit | atext_pun | dash | rangle | langle | alpha | period | colon | crlf | sp
+QuotedPair -> backslash .

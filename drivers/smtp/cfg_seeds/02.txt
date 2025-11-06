@@ -1,0 +1,7 @@
+HELO smtpgarden\r\n
+MAIL FROM:<apple@apple.com>\r\n
+RCPT TO:<user2@echo.smtp.garden>\r\n
+DATA\r\n
+:HEADxxxTAIL\r\n
+\r\n.\r\n
+QUIT\r\n
