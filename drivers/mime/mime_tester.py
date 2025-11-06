@@ -22,6 +22,9 @@ MIME_GARDEN_PATH = os.getenv("MIME_GARDEN_PATH", "")
 if not MIME_GARDEN_PATH:
     print("MIME_GARDEN_PATH environment variable is not set.")
     exit(1)
+if not os.path.exists(f"{MIME_GARDEN_PATH}/garden-io"):
+    print(f"{MIME_GARDEN_PATH} does not exists")
+    exit(1)
 
 IGNORE_FILENAME = True
 
@@ -206,8 +209,8 @@ def test_mime_parser(parsers: List[str],
     if not all(diff.values()):
         logger.debug("++ DIFF!")
         logger.debug("\n{}", mime)
-        if verbose:
-            print(full_output)
+    if verbose:
+        print(full_output)
     return diff, mime_results, full_output
 
 
@@ -243,8 +246,8 @@ if __name__ == '__main__':
     logger.remove()
     logger.add(sys.stderr, 
                filter={
-                   "grampar.dfafuzz": "ERROR", 
                    "": "INFO",
+                   #"": "DEBUG",
                  }
                )
     main()

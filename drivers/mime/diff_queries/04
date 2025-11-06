@@ -1,0 +1,16 @@
+MIME-Version: 1.0
+Content-Type: ; boundary="b"
+
+--b
+Content-Type: text/plain; name="partA.txt"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename="partA.txt"
+
+part-A
+--b
+Content-Type: text/plain; name="partB.txt"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename="partB.txt"
+
+part-B
+--b--
