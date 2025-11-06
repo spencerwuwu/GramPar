@@ -1,0 +1,3 @@
+[submodule "testbeds/smtp-grampar"]
+	path = testbeds/smtp-grampar
+	url = https://github.com/spencerwuwu/smtp-grampar.git
