@@ -19,6 +19,11 @@ submitted to the 47th IEEE Symposium on Security and Privacy (S&P 2026).
    ```bash
    ./build-docker.sh
    ```
+4. Install python library **grampar** and **smtpfuzz**
+   ```bash
+   cd grampar/; pip install -r requirements-dev.txt; cd ../
+   cd testbeds/smtp-grampar; pip install -r requirements-dev.txt
+   ```
 
 ## Usage
 ### Testing MIME Parsers
