@@ -31,13 +31,16 @@ submitted to the 47th IEEE Symposium on Security and Privacy (S&P 2026).
 cd drivers/mime
 ```
 
-1. Set up `MIME_GARDEN_PATH` to the absolute path where *GramPar/testbeds/mime* is
+1. Set up `MIME_GARDEN_PATH` to the absolute path where *GramPar/testbeds/mime* is, 
+   and start the docker containers.
 ```bash
 export MIME_GARDEN_PATH=/<path_to>/GramPar/testbeds/mime
+cd <path_to>/GramPar/testbeds/mime; docker compose up
 ```
 
-2. Run our Automata-based and CFG-based fuzzer.
-Running them without any arguments is also fine as default values are provided.
+2. Open another shell.
+   Run our Automata-based and CFG-based fuzzer.
+   Running them without any arguments is also fine as default values are provided.
 ```bash
 ./fuzz_dfa_mime.py [-h] [-o OUTPUT_DIR] [-i SEED_DIR] [-l LEXER_FILE]
 ./fuzz_cfg_mime.py [-h] [-o OUTPUT_DIR] [-i SEED_DIR] [-c CFG_FILE]
@@ -53,12 +56,15 @@ Running them without any arguments is also fine as default values are provided.
 cd drivers/smtp
 ```
 1. Set up `SMTP_GARDEN_PATH` to the absolute path where *GramPar/testbeds/smtp* is
+   and start the docker containers.
 ```bash
 export SMTP_GARDEN_PATH=/<path_to>/GramPar/testbeds/smtp-grampar
+cd <path_to>/GramPar/testbeds/mime; docker compose up echo postfix msmtp exim opensmtpd nullmailer aiosmtpd james-maildir
 ```
 
-2. Run our Automata-based and CFG-based fuzzer.
-Running them without any arguments is also fine as default values are provided.
+2. Open another shell.
+   Run our Automata-based and CFG-based fuzzer.
+   Running them without any arguments is also fine as default values are provided.
 ```bash
 ./fuzz_dfa_addr-body.py.py [-h] [-o OUTPUT_DIR] mode
 ./fuzz_cfg_mime.py [-h] [-o OUTPUT_DIR] [-c CFG_FILE]
